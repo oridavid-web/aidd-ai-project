@@ -25,6 +25,7 @@ export default function Home() {
           <a href="#experience" className="hover:text-white transition">Experience</a>
           <a href="#education" className="hover:text-white transition">Education</a>
           <a href="#ai" className="hover:text-white transition">AI</a>
+          <a href="#contact" className="hover:text-white transition">Contact</a>
         </div>
       </nav>
 
