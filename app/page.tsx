@@ -1,4 +1,42 @@
+"use client";
+
+import { useState } from "react";
+
 export default function Home() {
+  const [input, setInput] = useState("");
+  const [reply, setReply] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const askAI = async () => {
+    if (!input.trim()) return;
+
+    setLoading(true);
+    setReply("");
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await res.json();
+      setReply(data.reply || "Something went wrong. Please try again.");
+    } catch {
+      setReply("AI is currently unavailable. Please try again later.");
+    }
+
+    setLoading(false);
+  };
+
+  const gradientText =
+    "bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent";
+
+  const card =
+    "rounded-3xl border border-zinc-800 bg-zinc-950/80 p-8 hover:border-purple-500 hover:scale-[1.02] transition duration-300";
+
   return (
     <main className="min-h-screen bg-black text-white px-6 py-8 overflow-hidden">
       <style>{`
@@ -6,20 +44,13 @@ export default function Home() {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.25); }
-          50% { box-shadow: 0 0 35px rgba(34, 211, 238, 0.35); }
-        }
         .fade-up { animation: fadeUp 0.8s ease forwards; }
-        .glow-card:hover { animation: glow 1.8s ease infinite; }
       `}</style>
 
-      <nav className="max-w-5xl mx-auto flex justify-between items-center mb-24 fade-up">
-        <div className="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-          OD
-        </div>
+      <nav className="max-w-7xl mx-auto flex justify-between items-center mb-32 fade-up">
+        <div className={`text-2xl font-extrabold ${gradientText}`}>OD</div>
 
-        <div className="hidden md:flex gap-6 text-gray-400 text-sm">
+        <div className="hidden md:flex gap-8 text-gray-400 text-base">
           <a href="#about" className="hover:text-white transition">About</a>
           <a href="#projects" className="hover:text-white transition">Projects</a>
           <a href="#experience" className="hover:text-white transition">Experience</a>
@@ -29,202 +60,289 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="max-w-5xl mx-auto mb-24 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">PORTFOLIO</p>
-
-        <h1 className="text-6xl md:text-8xl font-extrabold leading-tight">
-          Ori David
-          <br />
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            PMO & Data driven.
-          </span>
-        </h1>
-
-        <p className="text-gray-400 text-xl mt-8 max-w-2xl leading-relaxed">
-          Industrial Engineering & Management student at HIT, combining data analytics,
-          PMO experience, and real-world leadership from IDF service.
+      <section className="max-w-7xl mx-auto mb-32 fade-up">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-12 text-lg">
+          PORTFOLIO
         </p>
 
-        <div className="flex flex-wrap gap-4 mt-8">
-          <a href="https://www.linkedin.com/in/oridavid5" target="_blank" className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 font-semibold hover:scale-105 transition">
+        <h1 className="text-7xl md:text-9xl font-extrabold leading-tight">
+          Ori David
+          <br />
+          <span className={gradientText}>PMO & Data driven.</span>
+        </h1>
+
+        <p className="text-gray-400 text-2xl mt-12 max-w-3xl leading-relaxed">
+          Industrial Engineering & Management student at HIT, combining data
+          analytics, PMO experience, and real-world leadership from IDF service.
+        </p>
+
+        <div className="flex flex-wrap gap-5 mt-10">
+          <a
+            href="https://www.linkedin.com/in/oridavid5"
+            target="_blank"
+            className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 font-bold hover:scale-105 transition"
+          >
             LinkedIn
           </a>
-          <a href="https://github.com/oridavid-web" target="_blank" className="px-6 py-3 rounded-full border border-purple-500 text-purple-300 hover:bg-purple-500 hover:text-white hover:scale-105 transition">
+
+          <a
+            href="https://github.com/oridavid-web"
+            target="_blank"
+            className="px-8 py-4 rounded-full border border-purple-500 text-purple-300 hover:bg-purple-500 hover:text-white hover:scale-105 transition"
+          >
             GitHub
           </a>
-          <a href="mailto:Oriri8000@gmail.com" className="px-6 py-3 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:scale-105 transition">
+
+          <a
+            href="mailto:Oriri8000@gmail.com"
+            className="px-8 py-4 rounded-full border border-cyan-500 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:scale-105 transition"
+          >
             Email
           </a>
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto mb-28 fade-up">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <section className="max-w-7xl mx-auto mb-32">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
             ["760", "Reserve Days"],
             ["4yr", "IDF Officer"],
             ["PMO", "Experience"],
             ["Data", "Analytics"],
           ].map(([num, label]) => (
-            <div key={label} className="glow-card bg-zinc-950 border border-zinc-800 rounded-3xl p-8 text-center hover:scale-105 hover:border-purple-500 transition duration-300">
-              <p className="text-4xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-                {num}
+            <div
+              key={label}
+              className="rounded-3xl border border-zinc-800 bg-zinc-950 p-10 text-center hover:border-purple-500 hover:scale-105 transition"
+            >
+              <p className={`text-5xl font-extrabold ${gradientText}`}>{num}</p>
+              <p className="text-gray-400 mt-4 tracking-widest text-sm uppercase">
+                {label}
               </p>
-              <p className="text-gray-400 mt-2 tracking-widest text-sm uppercase">{label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section id="about" className="max-w-5xl mx-auto mb-28 border-l-4 border-purple-500 pl-6 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">ABOUT</p>
+      <section
+        id="about"
+        className="max-w-7xl mx-auto mb-32 border-l-4 border-purple-500 pl-8"
+      >
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          ABOUT
+        </p>
 
-        <h2 className="text-4xl md:text-5xl font-bold mb-8">
-          A different kind of
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            {" "}PMO & Data student.
-          </span>
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-12 leading-tight">
+          A different kind of{" "}
+          <span className={gradientText}>PMO & Data student.</span>
         </h2>
 
-        <p className="text-gray-400 text-lg leading-relaxed mb-5">
-          I combine academic knowledge in Industrial Engineering & Management with operational experience from the IDF.
+        <p className="text-gray-400 text-2xl leading-relaxed mb-8">
+          I combine academic knowledge in Industrial Engineering & Management
+          with operational experience from the IDF.
         </p>
 
-        <p className="text-gray-400 text-lg leading-relaxed mb-5">
-          Experienced in PMO, data analysis, planning, Excel tracking tools, reporting, and supporting decision-making in fast-paced environments.
+        <p className="text-gray-400 text-2xl leading-relaxed mb-8">
+          Experienced in PMO, data analysis, planning, Excel tracking tools,
+          reporting, and supporting decision-making in fast-paced environments.
         </p>
 
-        <p className="text-gray-400 text-lg">
-          <b className="text-white">Languages</b> — Hebrew (native) · English (professional) · Spanish (basic) · Arabic (basic)
+        <p className="text-gray-400 text-xl">
+          <b className="text-white">Languages</b> — Hebrew (native) · English
+          (professional) · Spanish (basic) · Arabic (basic)
         </p>
       </section>
 
-      <section id="projects" className="max-w-5xl mx-auto mb-28 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">PROJECTS</p>
+      <section id="projects" className="max-w-7xl mx-auto mb-32">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          PROJECTS
+        </p>
 
-        <h2 className="text-4xl md:text-5xl font-bold mb-10">
-          Things I’ve
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            {" "}built and shipped.
-          </span>
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-16 leading-tight">
+          Things I've <span className={gradientText}>built and shipped.</span>
         </h2>
 
-        <div className="grid gap-6">
-          <div className="glow-card rounded-3xl border border-purple-900 bg-zinc-950 p-8 hover:border-purple-400 hover:scale-[1.02] transition duration-300">
-            <div className="flex justify-between items-center mb-4 gap-4">
-              <h3 className="text-2xl font-bold">Personal Portfolio Website</h3>
-              <span className="text-green-400 border border-green-700 px-3 py-1 rounded-full text-sm">Live</span>
+        <div className="grid gap-8">
+          <div className={`${card} border-purple-900`}>
+            <div className="flex justify-between items-center mb-8 gap-4">
+              <h3 className="text-4xl font-bold">Personal Portfolio Website</h3>
+              <span className="text-green-400 border border-green-700 px-4 py-2 rounded-full text-sm">
+                Live
+              </span>
             </div>
-            <p className="text-gray-400 leading-relaxed">
-              A responsive personal portfolio built with Next.js, GitHub and Vercel as part of the AIDD course.
+
+            <p className="text-gray-400 text-xl leading-relaxed">
+              A responsive personal portfolio built with Next.js, GitHub and
+              Vercel as part of the AIDD course.
             </p>
-            <p className="text-blue-400 mt-5">Next.js · GitHub · Vercel · AI-assisted development</p>
+
+            <p className="text-blue-400 text-xl mt-8">
+              Next.js · GitHub · Vercel · AI-assisted development
+            </p>
           </div>
 
-          <div className="glow-card rounded-3xl border border-zinc-800 bg-zinc-950 p-8 hover:border-cyan-400 hover:scale-[1.02] transition duration-300">
-            <h3 className="text-2xl font-bold mb-4">Operational Data Tracking Tools</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Excel-based tracking tools for manpower, logistics and operational execution, supporting planning accuracy and data-driven decisions.
+          <div className={card}>
+            <h3 className="text-4xl font-bold mb-8">
+              Operational Data Tracking Tools
+            </h3>
+
+            <p className="text-gray-400 text-xl leading-relaxed">
+              Excel-based tracking tools for manpower, logistics and operational
+              execution, supporting planning accuracy and data-driven decisions.
             </p>
-            <p className="text-purple-400 mt-5">Excel · Pivot Tables · VLOOKUP · Reporting · Operations</p>
+
+            <p className="text-purple-400 text-xl mt-8">
+              Excel · Pivot Tables · VLOOKUP · Reporting · Operations
+            </p>
           </div>
         </div>
       </section>
 
-      <section id="experience" className="max-w-5xl mx-auto mb-28 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">EXPERIENCE</p>
+      <section id="experience" className="max-w-7xl mx-auto mb-32">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          EXPERIENCE
+        </p>
 
-        <h2 className="text-4xl md:text-5xl font-bold mb-10">
-          Where I’ve
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            {" "}worked and led.
-          </span>
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-16 leading-tight">
+          Where I've <span className={gradientText}>worked and led.</span>
         </h2>
 
-        <div className="grid gap-6">
+        <div className="grid gap-8">
           {[
-            ["Active Reserve Duty — Operations & Data | IDF", "2023–2026", "Built Excel tools, analyzed manpower and logistics data, generated reports, and supported planning and execution in dynamic environments."],
-            ["Deputy Company Commander | Givati Brigade", "2021–2023", "Led planning and execution of operational activities for ~150 personnel, coordinated stakeholders, and improved operational performance."],
-            ["Logistics Officer | Givati Brigade", "2020–2021", "Managed logistics processes, built tracking systems, and supported resource allocation across multiple battalions."],
-          ].map(([title, years, desc]) => (
-            <div key={title} className="glow-card rounded-3xl border border-zinc-800 bg-zinc-950 p-8 hover:border-purple-500 hover:scale-[1.02] transition duration-300">
-              <h3 className="text-2xl font-bold">{title}</h3>
-              <p className="text-gray-500 mt-1">{years}</p>
-              <p className="text-gray-400 mt-4 leading-relaxed">{desc}</p>
+            [
+              "Active Reserve Duty — Operations & Data | IDF",
+              "2023-2026",
+              "Built Excel tools, analyzed manpower and logistics data, generated reports, and supported planning and execution in dynamic environments.",
+            ],
+            [
+              "Deputy Company Commander | Givati Brigade",
+              "2021-2023",
+              "Led planning and execution of operational activities for ~150 personnel, coordinated stakeholders, and improved operational performance.",
+            ],
+            [
+              "Logistics Officer | Givati Brigade",
+              "2020-2021",
+              "Managed logistics processes, built tracking systems, and supported resource allocation across multiple battalions.",
+            ],
+          ].map(([title, years, description], index) => (
+            <div
+              key={title}
+              className={`${card} ${index === 1 ? "border-purple-700" : ""}`}
+            >
+              <h3 className="text-4xl font-bold">{title}</h3>
+              <p className="text-gray-500 text-xl mt-4">{years}</p>
+              <p className="text-gray-400 text-xl mt-8 leading-relaxed">
+                {description}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section id="education" className="max-w-5xl mx-auto mb-28 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">EDUCATION</p>
+      <section id="education" className="max-w-7xl mx-auto mb-32">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          EDUCATION
+        </p>
 
-        <h2 className="text-4xl md:text-5xl font-bold mb-10">
-          Credentials &
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            {" "}achievements.
-          </span>
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-16 leading-tight">
+          Credentials & <span className={gradientText}>achievements.</span>
         </h2>
 
-        <div className="glow-card rounded-3xl border border-zinc-800 bg-zinc-950 p-8 mb-5 hover:border-cyan-400 hover:scale-[1.02] transition duration-300">
-          <h3 className="text-2xl font-bold">B.Sc. Industrial Engineering & Management</h3>
-          <p className="text-gray-400 mt-2">HIT — Holon Institute of Technology</p>
-          <p className="text-blue-400 mt-2">GPA: 88 · Expected 2027</p>
+        <div className={`${card} mb-8`}>
+          <h3 className="text-4xl font-bold">
+            B.Sc. Industrial Engineering & Management
+          </h3>
+          <p className="text-gray-400 text-xl mt-6">
+            HIT — Holon Institute of Technology
+          </p>
+          <p className="text-blue-400 text-xl mt-6">GPA: 88 · Expected 2027</p>
         </div>
 
-        <div className="glow-card rounded-3xl border border-zinc-800 bg-zinc-950 p-8 hover:border-purple-400 hover:scale-[1.02] transition duration-300">
-          <h3 className="text-2xl font-bold">AI-Driven Development Course</h3>
-          <p className="text-gray-400 mt-2">Focused on AI tools, workflow automation and process efficiency.</p>
+        <div className={card}>
+          <h3 className="text-4xl font-bold">AI-Driven Development Course</h3>
+          <p className="text-gray-400 text-xl mt-6">
+            Focused on AI tools, workflow automation and process efficiency.
+          </p>
         </div>
       </section>
 
-      <section id="ai" className="max-w-5xl mx-auto mb-32 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">ASK THE AI</p>
-
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Curious about
-          <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-            {" "}Ori?
-          </span>
-        </h2>
-
-        <p className="text-gray-400 mb-8 max-w-2xl">
-          An AI assistant trained on my profile. Ask about my experience, projects, or anything you'd ask in an interview.
+      <section id="ai" className="max-w-7xl mx-auto mb-32">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          ASK THE AI
         </p>
 
-        <div className="glow-card border border-zinc-800 rounded-3xl p-6 bg-zinc-950 hover:border-purple-500 transition">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              <p className="font-semibold">Ori's AI</p>
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-10 leading-tight">
+          Curious about <span className={gradientText}>Ori?</span>
+        </h2>
+
+        <p className="text-gray-400 text-xl mb-12 max-w-4xl leading-relaxed">
+          An AI assistant trained on my profile. Ask about my experience,
+          projects, or anything you would ask in an interview.
+        </p>
+
+        <div className="border border-zinc-800 rounded-3xl bg-zinc-950 p-10 hover:border-purple-500 transition">
+          <div className="flex justify-between items-center mb-10">
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+              <p className="font-bold text-xl">Ori's AI</p>
             </div>
-            <p className="text-gray-500 text-sm">Coming soon</p>
+            <p className="text-gray-500 text-lg">Powered by OpenAI</p>
           </div>
 
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center mb-4 hover:scale-110 transition">
-              ✨
-            </div>
-            <p className="text-gray-400">Ask me anything about Ori.</p>
+          <div className="min-h-64 border-y border-zinc-800 flex items-center justify-center text-center py-12">
+            {!reply && !loading && (
+              <div>
+                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-6 text-3xl">
+                  ✨
+                </div>
+                <p className="text-gray-400 text-xl">Ask me anything about Ori.</p>
+              </div>
+            )}
+
+            {loading && <p className="text-gray-400 text-xl">Thinking...</p>}
+
+            {reply && (
+              <p className="text-gray-300 text-xl leading-relaxed max-w-4xl">
+                {reply}
+              </p>
+            )}
           </div>
 
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-4 mt-10">
             <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about Ori..."
-              className="flex-1 bg-black border border-zinc-800 rounded-full px-5 py-3 text-sm outline-none focus:border-purple-500 transition"
+              className="flex-1 bg-black border border-zinc-800 rounded-full px-6 py-4 text-lg outline-none focus:border-purple-500 transition"
             />
-            <button className="px-5 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition">
+
+            <button
+              onClick={askAI}
+              disabled={loading}
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 font-bold hover:scale-105 transition disabled:opacity-50"
+            >
               ➤
             </button>
           </div>
         </div>
       </section>
 
-      <section id="contact" className="max-w-5xl mx-auto text-center pb-20 fade-up">
-        <p className="text-blue-400 font-bold tracking-[0.3em] mb-4">CONTACT</p>
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">Let’s connect.</h2>
-        <p className="text-gray-400 mb-8">Open to student roles in PMO, Data, BI, AI, Operations and Analytics.</p>
-        <a href="mailto:Oriri8000@gmail.com" className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 via-purple-600 to-cyan-500 font-bold hover:scale-105 transition inline-block">
+      <section id="contact" className="max-w-7xl mx-auto text-center pb-24">
+        <p className="text-blue-400 font-bold tracking-[0.45em] mb-6">
+          CONTACT
+        </p>
+
+        <h2 className="text-5xl md:text-7xl font-extrabold mb-8">
+          {"Let's connect."}
+        </h2>
+
+        <p className="text-gray-400 text-xl mb-10">
+          Open to student roles in PMO, Data, BI, AI, Operations and Analytics.
+        </p>
+
+        <a
+          href="mailto:Oriri8000@gmail.com"
+          className="px-10 py-5 rounded-full bg-gradient-to-r from-blue-500 via-purple-600 to-cyan-500 font-bold hover:scale-105 transition inline-block"
+        >
           Contact Me
         </a>
       </section>
