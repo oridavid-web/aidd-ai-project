@@ -1,8 +1,11 @@
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
+    const body = await req.json();
 
-    if (!message || !message.trim()) {
+    // תומך גם ב-message וגם ב-prompt
+    const message = body.message || body.prompt || "";
+
+    if (!message.trim()) {
       return Response.json({
         message: "Please write something so I can help you 🙂"
       });
