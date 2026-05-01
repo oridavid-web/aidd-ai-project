@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState("");
+  const [messages, setMessages] = useState<{ role: "user" | "ai"; text: string }[]>([]);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [reply, loading]);
 
   const askAI = async () => {
     if (!input.trim()) return;
@@ -14,6 +19,7 @@ export default function Home() {
     setLoading(true);
     setReply("");
     setSubmittedQuestion(input);
+    setMessages((prev) => [...prev, { role: "user", text: input }]);
 
     try {
       const res = await fetch("/api/chat", {
@@ -23,7 +29,11 @@ export default function Home() {
       });
 
       const data = await res.json();
-      setReply(data.reply || data.response || data.message || "Something went wrong. Please try again.");
+      const aiReply =
+  data.reply || data.response || data.message || "Something went wrong. Please try again.";
+
+setReply(aiReply);
+setMessages((prev) => [...prev, { role: "ai", text: aiReply }]);
     } catch {
       setReply("AI is currently unavailable.");
     }
@@ -315,23 +325,29 @@ export default function Home() {
   </div>
 )}
 
-{reply && (
-  <div className="max-w-4xl w-full space-y-4">
-    <div className="flex justify-end">
-      <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xl">
-        {submittedQuestion}
-      </div>
-    </div>
+{messages.map((msg, index) => (
+  <div key={index} className="max-w-4xl w-full space-y-4">
 
-    <div className="flex justify-start">
-      <div className="bg-zinc-800 text-gray-200 px-5 py-3 rounded-2xl rounded-bl-sm max-w-xl">
-        {reply}
+    {msg.role === "user" && (
+      <div className="flex justify-end">
+        <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xs">
+          {msg.text}
+        </div>
       </div>
-    </div>
+    )}
+
+    {msg.role === "ai" && (
+      <div className="flex justify-start">
+        <div className="bg-zinc-800 text-gray-200 px-5 py-3 rounded-2xl rounded-bl-sm max-w-xs">
+          {msg.text}
+        </div>
+      </div>
+    )}
+
   </div>
-)}
+))}
           </div>
-
+<div ref={bottomRef} />
           <div className="flex gap-4 mt-8">
             <input
               value={input}
