@@ -296,7 +296,11 @@ export default function Home() {
               </div>
             )}
 
-            {loading && <p className="text-gray-400 text-lg">Thinking...</p>}
+            {loading && (
+  <p className="text-purple-400 text-lg animate-pulse">
+    AI is thinking...
+  </p>
+)}
 
             {reply && (
               <p className="text-gray-300 text-lg leading-relaxed max-w-4xl">
