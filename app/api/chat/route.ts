@@ -2,23 +2,27 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // תומך גם ב-message וגם ב-prompt
-    const message = body.message || body.prompt || "";
+    const userMessage = body.message || body.prompt || body.input || "";
 
-    if (!message.trim()) {
+    if (!userMessage.trim()) {
       return Response.json({
-        message: "Please write something so I can help you 🙂"
+        message: "Please write something so I can help you 🙂",
+        response: "Please write something so I can help you 🙂"
       });
     }
 
+    const demoAnswer =
+      "Hi! I'm Ori's AI assistant. Ori is an Industrial Engineering & Management student at HIT, with experience in PMO, Data Analytics, Excel, SQL, Python, operations, and IDF leadership. The live AI API is currently disabled due to credit limits, but the AI feature structure is implemented successfully.";
+
     return Response.json({
-      message:
-        "Hi! I'm Ori's AI assistant. The AI service is currently disabled due to API credit limits, but the feature is implemented correctly."
+      message: demoAnswer,
+      response: demoAnswer
     });
 
   } catch (error) {
     return Response.json({
-      message: "Something went wrong. Please try again."
+      message: "AI is currently unavailable.",
+      response: "AI is currently unavailable."
     });
   }
 }
