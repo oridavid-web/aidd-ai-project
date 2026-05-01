@@ -297,16 +297,36 @@ export default function Home() {
             )}
 
             {loading && (
-  <p className="text-purple-400 text-lg animate-pulse">
-    AI is thinking...
-  </p>
+  <div className="max-w-4xl w-full space-y-4">
+    <div className="flex justify-end">
+      <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xl">
+        {input}
+      </div>
+    </div>
+
+    <div className="flex justify-start">
+      <div className="bg-zinc-800 text-purple-300 px-5 py-3 rounded-2xl rounded-bl-sm animate-pulse">
+        AI is thinking...
+      </div>
+    </div>
+  </div>
 )}
 
-            {reply && (
-              <p className="text-gray-300 text-lg leading-relaxed max-w-4xl">
-                {reply}
-              </p>
-            )}
+{reply && (
+  <div className="max-w-4xl w-full space-y-4">
+    <div className="flex justify-end">
+      <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xl">
+        {input}
+      </div>
+    </div>
+
+    <div className="flex justify-start">
+      <div className="bg-zinc-800 text-gray-200 px-5 py-3 rounded-2xl rounded-bl-sm max-w-xl">
+        {reply}
+      </div>
+    </div>
+  </div>
+)}
           </div>
 
           <div className="flex gap-4 mt-8">
