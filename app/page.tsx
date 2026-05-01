@@ -27,6 +27,7 @@ export default function Home() {
     }
 
     setLoading(false);
+    setInput("");
   };
 
   const gradientText =
