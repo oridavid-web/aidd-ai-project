@@ -6,12 +6,14 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submittedQuestion, setSubmittedQuestion] = useState("");
 
   const askAI = async () => {
     if (!input.trim()) return;
 
     setLoading(true);
     setReply("");
+    setSubmittedQuestion(input);
 
     try {
       const res = await fetch("/api/chat", {
@@ -301,7 +303,7 @@ export default function Home() {
   <div className="max-w-4xl w-full space-y-4">
     <div className="flex justify-end">
       <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xl">
-        {input}
+        {submittedQuestion}
       </div>
     </div>
 
@@ -317,7 +319,7 @@ export default function Home() {
   <div className="max-w-4xl w-full space-y-4">
     <div className="flex justify-end">
       <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xl">
-        {input}
+        {submittedQuestion}
       </div>
     </div>
 
