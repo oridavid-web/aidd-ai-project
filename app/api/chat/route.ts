@@ -1,40 +1,21 @@
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
-  const { message } = await req.json();
+  try {
+    const { message } = await req.json();
 
-  const response = await client.chat.completions.create({
-    model: "gpt-4.1-mini",
-    messages: [
-      {
-        role: "system",
-        content: `
-You are Ori David's personal AI assistant.
+    if (!message || !message.trim()) {
+      return Response.json({
+        message: "Please write something so I can help you 🙂"
+      });
+    }
 
-Ori is:
-- Industrial Engineering & Management student (HIT)
-- PMO + Data Analytics
-- IDF Officer
-- 760+ reserve days
-- Strong in Excel, SQL, Python
-- Looking for student roles in Data / PMO / BI
+    return Response.json({
+      message:
+        "Hi! I'm Ori's AI assistant. The AI service is currently disabled due to API credit limits, but the feature is implemented correctly."
+    });
 
-Answer like a confident, impressive assistant helping recruiters.
-Keep answers short and sharp.
-        `,
-      },
-      {
-        role: "user",
-        content: message,
-      },
-    ],
-  });
-
-  return Response.json({
-    reply: response.choices[0].message.content,
-  });
+  } catch (error) {
+    return Response.json({
+      message: "Something went wrong. Please try again."
+    });
+  }
 }
