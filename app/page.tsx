@@ -21,7 +21,7 @@ export default function Home() {
       });
 
       const data = await res.json();
-      setReply(data.reply || "Something went wrong. Please try again.");
+      setReply(data.reply || data.response || data.message || "Something went wrong. Please try again.");
     } catch {
       setReply("AI is currently unavailable.");
     }
