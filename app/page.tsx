@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -8,10 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [messages, setMessages] = useState<{ role: "user" | "ai"; text: string }[]>([]);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-}, [reply, loading]);
+
 
   const askAI = async () => {
     if (!input.trim()) return;
@@ -326,28 +323,23 @@ setMessages((prev) => [...prev, { role: "ai", text: aiReply }]);
 )}
 
 {messages.map((msg, index) => (
-  <div key={index} className="max-w-4xl w-full space-y-4">
-
-    {msg.role === "user" && (
-      <div className="flex justify-end">
-        <div className="bg-purple-600 text-white px-5 py-3 rounded-2xl rounded-br-sm max-w-xs">
-          {msg.text}
-        </div>
-      </div>
-    )}
-
-    {msg.role === "ai" && (
-      <div className="flex justify-start">
-        <div className="bg-zinc-800 text-gray-200 px-5 py-3 rounded-2xl rounded-bl-sm max-w-xs">
-          {msg.text}
-        </div>
-      </div>
-    )}
-
+  <div
+    key={index}
+    className={`w-full flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+  >
+    <div
+      className={`px-5 py-3 rounded-2xl max-w-[80%] ${
+        msg.role === "user"
+          ? "bg-purple-600 text-white rounded-br-sm"
+          : "bg-zinc-800 text-gray-200 rounded-bl-sm"
+      }`}
+    >
+      {msg.text}
+    </div>
   </div>
 ))}
           </div>
-<div ref={bottomRef} />
+
           <div className="flex gap-4 mt-8">
             <input
               value={input}
