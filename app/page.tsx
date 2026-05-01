@@ -336,6 +336,12 @@ export default function Home() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
+   onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    askAI();
+  }
+}}
               placeholder="Ask about Ori..."
               className="flex-1 bg-black border border-zinc-800 rounded-full px-6 py-4 text-base outline-none focus:border-purple-500 transition"
             />
