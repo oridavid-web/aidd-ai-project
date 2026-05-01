@@ -296,7 +296,7 @@ setMessages((prev) => [...prev, { role: "ai", text: aiReply }]);
             <p className="text-gray-500 text-base">Powered by OpenAI</p>
           </div>
 
-          <div className="min-h-56 border-y border-zinc-800 flex items-center justify-center text-center py-10">
+          <div className="min-h-56 border-y border-zinc-800 flex flex-col items-stretch justify-start gap-4 py-8">
             {!reply && !loading && (
               <div>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-5 text-2xl">
